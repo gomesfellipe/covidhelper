@@ -96,7 +96,7 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
 
 
     def from_dict(self, data, new_user=False):
-        for field in ['username', 'email', 'about_me', 'name', 'address']:
+        for field in ['username', 'name', 'address', 'uti_places', 'care_places']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:

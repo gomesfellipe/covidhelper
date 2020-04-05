@@ -1,4 +1,4 @@
-"""Setup for oka package."""
+"""Setup for covidhelper package."""
 import setuptools
 import _version
 
@@ -82,5 +82,5 @@ setuptools.setup(
     extras_require=EXTRAS_REQUIRE,
 )
 
-package_dir = {'': 'oka'}  # For IDEs like Intellij to recognize the package.
+package_dir = {'': 'backend'}  # For IDEs like Intellij to recognize the package.
 
