@@ -1,2 +1,2 @@
-# rabizao-gmail.com
+# Covid helper
 Covid helper
