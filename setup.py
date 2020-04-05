@@ -1,11 +1,11 @@
 """Setup for oka package."""
 import setuptools
-import covidhelper._version
+import _version
 
 NAME = "covidhelper"
 
 
-VERSION = covidhelper._version.__version__
+VERSION = _version.__version__
 
 
 AUTHOR = 'Rafael'
