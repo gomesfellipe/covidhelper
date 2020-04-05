@@ -1,0 +1,2 @@
+FLASK_APP=covidhelper.py
+FLASK_ENV=development
