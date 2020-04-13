@@ -33,20 +33,37 @@ class PaginatedAPIMixin(object):
         return data
 
 
+class Hospital(db.Model):
+    __tablename__ = 'hospital'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    managers = db.relationship('Manager', backref='hospital', lazy='dynamic')
+    
+    def add_manager(self, username=username):
+        manager = Manager(username=username, hospital=self)
+        db.session.commit()
+        return manager
+
+
 class User(UserMixin, PaginatedAPIMixin, db.Model):
+    __tablename__ = 'user'
+    type = db.Column(db.String(20))
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     name = db.Column(db.String(140))
     address = db.Column(db.String(140))
-    uti_places = db.Column(db.Integer)
-    care_places = db.Column(db.Integer)
-    available_uti_places = db.Column(db.Integer)
-    available_care_places = db.Column(db.Integer)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'user'
+    }
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -82,10 +99,6 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
             'username': self.username,
             'name': self.name,
             'address': self.address,
-            'uti_places': self.uti_places,
-            'care_places': self.care_places,
-            'available_uti_places': self.available_uti_places,
-            'available_care_places': self.available_care_places,
             '_links': {
                 'self': url_for('api.get_user', id=self.id)
             }
@@ -94,7 +107,6 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
             data['email'] = self.email
         return data
 
-
     def from_dict(self, data, new_user=False):
         for field in ['username', 'name', 'address', 'uti_places', 'care_places']:
             if field in data:
@@ -102,9 +114,49 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         if new_user and 'password' in data:
             self.set_password(data['password'])
 
-
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+
+class Pacient(User):
+    score = db.Column(db.Float(10, 2))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'pacient'
+    }
+
+    def __repr__(self):
+        return '<Pacient {}>'.format(self.username)
+
+
+class Nurse(User):
+
+    #nurse_id = db.Column(db.ForeignKey('user.id'))
+    #nurse_hospital_id = db.Column(db.ForeignKey('hospital.id'))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'nurse'
+    }
+
+    def __repr__(self):
+        return '<Nurse {}>'.format(self.username)
+
+
+class Manager(User):
+
+    hospital_id = db.Column(db.Integer, db.ForeignKey('hospital.id'))
+
+    uti_places = db.Column(db.Integer)
+    care_places = db.Column(db.Integer)
+    available_uti_places = db.Column(db.Integer)
+    available_care_places = db.Column(db.Integer)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'manager'
+    }
+
+    def __repr__(self):
+        return '<Manager {}>'.format(self.username)
 
 
 @login.user_loader
