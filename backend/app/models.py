@@ -4,9 +4,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import app, login, db
 from flask import session, url_for
 import json
-from time import time
 import base64
 import os
+
+
+users = db.Table('users',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('hospital_id', db.Integer, db.ForeignKey('hospital.id'), primary_key=True)
+)
 
 
 class PaginatedAPIMixin(object):
@@ -34,22 +39,40 @@ class PaginatedAPIMixin(object):
 
 
 class Hospital(db.Model):
-    __tablename__ = 'hospital'
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    managers = db.relationship('Manager', backref='hospital', lazy='dynamic')
-    
-    def add_manager(self, username=username):
-        manager = Manager(username=username, hospital=self)
+    uti_places = db.Column(db.Integer)
+    care_places = db.Column(db.Integer)
+    available_uti_places = db.Column(db.Integer)
+    available_care_places = db.Column(db.Integer)
+
+    users = db.relationship('User', secondary=users, lazy='dynamic',
+        backref=db.backref('hospitals', lazy='dynamic'))
+
+    def set_manager(self, user):
+        if user.is_manager_of(self):
+            return
+        user.hospitals.append(self)
+        user.promote_to_manager()
         db.session.commit()
-        return manager
+        return
+
+    def get_managers(self):
+        return self.users.all()
+
+    @staticmethod
+    def get_by_id(id):
+        return Hospital.query.filter_by(id=id).first()
+
+    @staticmethod
+    def get_by_name(name):
+        return Hospital.query.filter_by(name=name).first()
+
+    def __repr__(self):
+        return '<Hospital {}>'.format(self.name)
 
 
 class User(UserMixin, PaginatedAPIMixin, db.Model):
-    __tablename__ = 'user'
-    type = db.Column(db.String(20))
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -58,11 +81,27 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     address = db.Column(db.String(140))
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    role = db.Column(db.String(32), default="user")
+    score = db.Column(db.Float(10, 2))
 
-    __mapper_args__ = {
-        'polymorphic_on': type,
-        'polymorphic_identity': 'user'
-    }
+    def is_manager_of(self, hospital):
+        return self.hospitals.filter(
+            users.c.hospital_id == hospital.id).count() > 0
+
+    def promote_to_manager(self):
+        return self.role=="manager"
+    
+    def promote_to_nurse(self):
+        return self.role=="nurse"
+
+    def promote_to_admin(self):
+        return self.role=="admin"
+
+    def promote_to_pacient(self):
+        return self.role=="pacient"
+    
+    def promote_to_user(self):
+        return self.role=="user"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -90,8 +129,12 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         return user
 
     @staticmethod
-    def get_user_object(id):
+    def get_by_id(id):
         return User.query.filter_by(id=id).first()
+
+    @staticmethod
+    def get_by_username(username):
+        return User.query.filter_by(username=username).first()
 
     def to_dict(self, include_email=False):
         data = {
@@ -116,47 +159,6 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-
-class Pacient(User):
-    score = db.Column(db.Float(10, 2))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'pacient'
-    }
-
-    def __repr__(self):
-        return '<Pacient {}>'.format(self.username)
-
-
-class Nurse(User):
-
-    #nurse_id = db.Column(db.ForeignKey('user.id'))
-    #nurse_hospital_id = db.Column(db.ForeignKey('hospital.id'))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'nurse'
-    }
-
-    def __repr__(self):
-        return '<Nurse {}>'.format(self.username)
-
-
-class Manager(User):
-
-    hospital_id = db.Column(db.Integer, db.ForeignKey('hospital.id'))
-
-    uti_places = db.Column(db.Integer)
-    care_places = db.Column(db.Integer)
-    available_uti_places = db.Column(db.Integer)
-    available_care_places = db.Column(db.Integer)
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'manager'
-    }
-
-    def __repr__(self):
-        return '<Manager {}>'.format(self.username)
 
 
 @login.user_loader
