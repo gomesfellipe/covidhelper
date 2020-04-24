@@ -9,7 +9,7 @@
 
 body {
     font: 400 14px Roboto, sans-serif;
-    background: #f0f0f5;
+    background: #ecf2fe;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -19,4 +19,13 @@ input, button, textarea {
 
 button {
     cursor: pointer;
+}
+
+.button-default {
+    vertical-align: middle;
+    align-items: center;
+    background-color: #ef5d50;
+    color: white;
+    height: 80px;
+    border: 1px solid #3241e4;
 }

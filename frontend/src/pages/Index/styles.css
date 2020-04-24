@@ -1,0 +1,89 @@
+.full-width {
+    width: 100%;
+}
+
+.session-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    flex-wrap: wrap;
+    width: 100%;
+    color: white;
+    padding: 130px 50px 130px 50px;
+}
+
+.session-item {
+    width: 600px;
+}
+
+.background-blue {
+    background-color: #3241e4;
+}
+
+.background-orange {
+    background-color: #ef5d50;
+}
+
+.background-white {
+    background-color: #ecf2fe;
+}
+
+.padding-top-bottom-big {
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.margin-top-big {
+    margin-top: 100px;
+}
+
+.margin-bottom-big {
+    margin-bottom: 100px;
+}
+
+.padding-top-small {
+    padding-top: 40px;
+}
+
+.padding-top-big {
+    padding-top: 80px;
+}
+
+.session-img-logo {
+    height: 150px;
+}
+
+.session-img {
+    width: 600px;
+}
+
+.session-img-small {
+    height: 150px;
+}
+
+/*
+.session-container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    background-color: #3241e4;
+    width: 100%;
+    padding: 30px;
+}
+*/
+
+.text-big {
+    font-size: 72px;
+}
+
+.text-black {
+    color: #272f65;
+}
+
+.text-medium {
+    font-size: 45px;
+}

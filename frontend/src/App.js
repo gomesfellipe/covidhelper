@@ -1,22 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import './global.css'
+import './global.css';
 
-import Header from './Header';
-import Logon from './pages/Logon'
+import Routes from './routes';
 
 function App() {
-  let [counter, setCounter] = useState(0);
-
-  function increment(){
-    setCounter(counter+1);
-  }
 
   return (
     <div>
-      <Header>Contador: {counter}</Header>
-      <button onClick={increment}>Incrementar</button>
-      <Logon/>
+      <Routes />
     </div>
   );
 }

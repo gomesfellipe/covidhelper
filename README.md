@@ -1,4 +1,4 @@
-# covidhelper
+# covidhelper **UNDER DEVELOPMENT**
 Help with covid 19.
 
 Install
