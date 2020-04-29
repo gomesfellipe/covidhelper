@@ -21,11 +21,27 @@ button {
     cursor: pointer;
 }
 
-.button-default {
+.button {
     vertical-align: middle;
     align-items: center;
     background-color: #ef5d50;
     color: white;
     height: 80px;
-    border: 1px solid #3241e4;
+    border: 0;
+    width: 100%;
+    transition: filter 0.2s;
+}
+
+.button:hover {
+    filter: brightness(90%);
+}
+
+form input {
+    width: 100%;
+    padding: 0 24px;
+    margin: 5px 0;
+    height: 60px;
+    color: #333;
+    border: 1px solid #dcdce6;
+    border-radius: 8px;
 }

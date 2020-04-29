@@ -22,10 +22,16 @@ export default function Header() {
                 </div>
             </div>
             <div className="header-container-item">
-                <button className="button-default">
-                    <Link to="/register" className="header-link">Cadastro</Link>
-                </button>
-                <Link to="/login" className="header-link">Login</Link>
+                <div className="header-link">
+                    <button className="button">
+                        <Link to="/register" className="header-link">Cadastro</Link>
+                    </button>
+                </div>
+                <div className="header-link">
+                    <Link to="/login" className="header-link">Login</Link>
+                </div>
+                
+                
             </div>
         </div>
     );
