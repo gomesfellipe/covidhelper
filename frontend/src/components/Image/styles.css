@@ -1,0 +1,19 @@
+.img-logo {
+    max-height: 150px;
+    max-width: fit-content;
+}
+
+.img-big {
+    max-height: 600px;
+    max-width: fit-content;
+}
+
+.img-small {
+    max-height: 150px;
+    max-width: fit-content;
+}
+
+.img-medium {
+    max-height: 250px;
+    max-width: fit-content;
+}

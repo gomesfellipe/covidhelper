@@ -4,6 +4,7 @@
 
 .session-container {
     display: flex;
+    flex-flow: row;
     justify-content: space-around;
     align-items: center;
     text-align: center;
@@ -15,7 +16,11 @@
 }
 
 .session-item {
-    width: 600px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
 }
 
 .background-blue {
@@ -31,8 +36,7 @@
 }
 
 .padding-top-bottom-big {
-    padding-top: 100px;
-    padding-bottom: 100px;
+    padding: 100px 20px;
 }
 
 .margin-top-big {
@@ -51,17 +55,7 @@
     padding-top: 80px;
 }
 
-.session-img-logo {
-    height: 150px;
-}
 
-.session-img {
-    width: 600px;
-}
-
-.session-img-small {
-    height: 150px;
-}
 
 /*
 .session-container-center {
@@ -76,14 +70,21 @@
 }
 */
 
-.text-big {
-    font-size: 72px;
-}
+
 
 .text-black {
     color: #272f65;
 }
 
+.text-small {
+    font-size: 32px;
+}
+
 .text-medium {
     font-size: 45px;
+}
+
+.text-big {
+    font-size: 72px;
+    font-weight: bold;
 }
