@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import api from '../../services/api'
+import { Link, useHistory } from 'react-router-dom';
+import api from '../../services/api';
 
 import './styles.css';
 
 //import {FiLogIn} from 'react-icons/fi';
 
-import logoOrangeImg from '../../assets/logo-orange.png'
+import logoOrangeImg from '../../assets/logo-orange.png';
 
 import Flyer from '../../components/Flyer';
 import Box from '../../components/Box';
@@ -18,6 +17,8 @@ import Image from '../../components/Image';
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const history = useHistory();
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -34,11 +35,13 @@ export default function Login() {
 
         try {
             const response = await api.post('tokens', {}, auth);
-            alert(`Token de acesso: ${response.data.token}`);
+            localStorage.setItem('token', response.data.token);
+            history.push('/appindex');
         } catch {
             alert('Erro ao requisitar token');
         }
     }
+    
     return (
         <div>
             <Flyer background="white">
