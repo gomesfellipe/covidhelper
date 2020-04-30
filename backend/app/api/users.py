@@ -13,6 +13,9 @@ def get_user(id):
 
     return jsonify(User.query.get_or_404(id).to_dict())
 
+@bp.route('/user', methods=['GET'])
+def get_user_by_token():
+    return 
 
 @bp.route('/users', methods=['GET'])
 def get_users():
