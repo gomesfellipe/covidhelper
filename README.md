@@ -12,18 +12,16 @@ Install
     pip install -e .
 
 Use
----
-    For backend:
 
+For backend:
+---
     cd backend/
     flask run
 
 
-    For frontend:
-
+For frontend:
+---
     cd frontend/
     npm start
-
-
 
     
