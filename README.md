@@ -13,9 +13,16 @@ Install
 
 Use
 ---
+    For backend:
 
     cd backend/
     flask run
+
+
+    For frontend:
+
+    cd frontend/
+    npm start
 
 
 
