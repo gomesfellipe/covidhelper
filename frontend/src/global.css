@@ -45,3 +45,7 @@ form input {
     border: 1px solid #dcdce6;
     border-radius: 8px;
 }
+
+.padding-top-bottom-offset {
+    padding: 120px 20px;
+}

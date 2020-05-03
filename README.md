@@ -15,13 +15,16 @@ Use
 
 For backend:
 ---
+    source venv/bin/activate
     cd backend/
     flask run
 
 
 For frontend:
 ---
+    source venv/bin/activate
     cd frontend/
+    npm install
     npm start
 
     

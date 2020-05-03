@@ -10,8 +10,9 @@ def get_token():
     """ This route should create a new token and return to the user based on the authentication with username and password """
 
     token = g.current_user.get_token()
+    id = g.current_user.id
     db.session.commit()
-    return jsonify({'token': token})
+    return jsonify({'token': token, 'id': id})
 
 
 @bp.route('/tokens', methods=['DELETE'])

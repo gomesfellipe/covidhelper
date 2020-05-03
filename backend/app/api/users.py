@@ -6,21 +6,36 @@ from app.api.errors import bad_request
 from app.api.auth import token_auth
 
 
+@bp.route('/user', methods=['GET'])
+@token_auth.login_required
+def get_user():
+    """
+    Return all informations about the user currently logged in
+    """
+    return jsonify(User.query.get_or_404(g.current_user.id).to_dict())
+
+
 @bp.route('/users/<int:id>', methods=['GET'])
-def get_user(id):
-    """ This route should return a json object containing the informations of the hospital with id <id> in the database 
-    and is available to everyone """
+@token_auth.login_required
+def get_user_by_id(id):
+    """
+    This route should return a json object containing the informations 
+    of the user with id <id> in the database. Available only for the logged responsible
+    """
+
+    if g.current_user.id != id:
+        abort(403)
 
     return jsonify(User.query.get_or_404(id).to_dict())
 
-@bp.route('/user', methods=['GET'])
-def get_user_by_token():
-    return 
 
 @bp.route('/users', methods=['GET'])
+@token_auth.login_required
 def get_users():
-    """ This route should return a json object containing the informations of all hospitals in the database 
-    and is available to everyone """
+    """
+    This route should return a json object containing the informations 
+    of all users in the database that the logged responsible have access
+    """
 
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
@@ -30,7 +45,9 @@ def get_users():
 
 @bp.route('/users', methods=['POST'])
 def create_user():
-    """ This route should create a new user and return its informations """
+    """
+    This route should create a new user and return its informations
+    """
 
     data = request.get_json() or {}
     if 'username' not in data or 'password' not in data or 'rg' not in data:
@@ -54,7 +71,9 @@ def create_user():
 @bp.route('/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_user(id):
-    """ This route should update an existing user and is available only for that user """
+    """
+    This route should update an existing user and is available only for that user
+    """
 
     if g.current_user.id != id:
         abort(403)
