@@ -58,7 +58,6 @@ export default function AppIndex() {
             }
         }).then(response => {
             setIncidents(response.data.items);
-            console.log(response.data.items);
         }).catch(error => {
             alert(error);
         })

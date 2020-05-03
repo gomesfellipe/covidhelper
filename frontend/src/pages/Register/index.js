@@ -36,8 +36,7 @@ export default function Register() {
         );
 
         try {
-            const response = await api.post('users', data);
-            alert(`Id do novo usuario: ${response.data.id}`);
+            await api.post('users', data);
             history.push('/login');
         } catch {
             alert('Erro ao criar usuario');
