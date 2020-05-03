@@ -72,6 +72,9 @@ export default function AppIndex() {
                     data={incidents}
                     title="Pacientes"
                     icons={tableIcons}
+                    options={{
+                        exportButton: true
+                    }}
                 />
             </div>
         </div>
