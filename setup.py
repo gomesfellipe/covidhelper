@@ -43,7 +43,7 @@ CLASSIFIERS = ['Intended Audience :: Science/Research',
 
 
 INSTALL_REQUIRES = [
-    'flask', 'flask-wtf', 'flask-login', 'flask-sqlalchemy', 'flask-migrate', 'python-dotenv', 'flask-httpauth'
+    'flask', 'flask-wtf', 'flask-login', 'flask-sqlalchemy', 'flask-migrate', 'python-dotenv', 'flask-httpauth', 'flask-cors'
 ]
 
 
