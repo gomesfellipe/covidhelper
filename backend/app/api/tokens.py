@@ -23,3 +23,10 @@ def revoke_token():
     g.current_user.revoke_token()
     db.session.commit()
     return '', 204
+
+
+@bp.route('/tokens', methods=['GET'])
+@token_auth.login_required
+def check_token():
+    """ This route should check the token previously created by the user and return its id"""
+    return jsonify({'id': g.current_user.id})
