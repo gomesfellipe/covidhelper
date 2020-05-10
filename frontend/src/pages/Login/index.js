@@ -36,7 +36,8 @@ export default function Login() {
         try {
             const response = await api.post('tokens', {}, auth);
             localStorage.setItem('token', response.data.token);
-            history.push('/appindex');
+            localStorage.setItem('id', response.data.id);
+            history.push('/dashboard');
         } catch {
             alert('Erro ao requisitar token');
         }

@@ -39,7 +39,8 @@ def get_users():
 
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
-    data = User.to_collection_dict(User.query, page, per_page, 'api.get_users')
+    search = request.args.get('search', '', type=str)
+    data = User.to_collection_dict(User.query.filter(User.username.like("%{}%".format(search))), page, per_page, 'api.get_users')
     return jsonify(data)
 
 
@@ -75,7 +76,7 @@ def update_user(id):
     This route should update an existing user and is available only for that user
     """
 
-    if g.current_user.id != id:
+    if g.current_user.id != id and g.current_user.access < 1:
         abort(403)
     user = User.query.get_or_404(id)
     data = request.get_json() or {}
@@ -85,5 +86,20 @@ def update_user(id):
             User.query.filter_by(email=data['email']).first():
         return bad_request('please use a different email address')
     user.from_dict(data, new_user=False)
+    db.session.commit()
+    return jsonify(user.to_dict())
+
+
+@bp.route('/users/<int:id>', methods=['DELETE'])
+@token_auth.login_required
+def delete_user(id):
+    """
+    This route should update an existing user and is available only for that user
+    """
+
+    if g.current_user.id != id and g.current_user.access < 1:
+        abort(403)
+    user = User.query.get_or_404(id)
+    db.session.delete(user)
     db.session.commit()
     return jsonify(user.to_dict())

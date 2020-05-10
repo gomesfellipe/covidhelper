@@ -83,7 +83,7 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     access = db.Column(db.Integer, default=0)
-    score = db.Column(db.Float(10, 2))
+    score = db.Column(db.Float(10, 2), default=-1)
 
     def is_manager_of(self, hospital):
         return self.hospitals.filter(
