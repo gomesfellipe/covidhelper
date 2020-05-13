@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
 
@@ -40,6 +40,7 @@ function Greeting(props) {
 }
 
 export default function Header() {
+    const history = useHistory();
     const token = localStorage.getItem('token');
 
     const [id, setLogin] = useState([]);
@@ -53,9 +54,9 @@ export default function Header() {
             setLogin(response.data.id);
         }).catch(error => {
             setLogin(false);
-            alert(error);
+            history.push('/login');
         })
-    }, [token]);
+    }, [token, history]);
     return (
         <div className="header-container sticky lower-opacity">
             <div className="header-container-item">

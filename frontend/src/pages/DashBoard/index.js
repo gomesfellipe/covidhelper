@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
-import HeaderApp from '../../components/HeaderApp';
+//import HeaderApp from '../../components/HeaderApp';
+
+import logoImg from '../../assets/logo.png'
 
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
@@ -42,36 +45,69 @@ const tableIcons = {
 };
 
 const columns = [
-    { title: "Username", field: "username"},
+    { title: "Username", field: "username", editable: "onAdd" },
     { title: "RG", field: "rg" },
-    { title: "Score", field: "score" }
+    { title: "Score", field: "score", editable: "never" }
 ];
 
-export default function DashBoard() {
-    const token = localStorage.getItem('token');
-    const headers = {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    }
+function UserGreeting(props) {
+    return (
+        <div className="header-container-item">
+            <div className="header-link">
+                <h1>Welcome back!</h1>
+            </div>
+        </div>
+    )
+}
 
+function GuestGreeting(props) {
+    return (
+        <div className="header-container-item">
+            <div className="header-link">
+                <button className="button">
+                    <Link to="/register" className="header-link">Cadastro</Link>
+                </button>
+            </div>
+            <div className="header-link">
+                <Link to="/login" className="header-link">Login</Link>
+            </div>
+        </div>
+    )
+}
+
+function Greeting(props) {
+    const loggedId = props.loggedId;
+    if (loggedId) {
+        return <UserGreeting />
+    }
+    return <GuestGreeting />
+}
+
+function Table(props) {
     return (
         <div>
-            <HeaderApp />
+            <div className="header-container sticky lower-opacity">
+                <div className="header-container-item">
+                    <div className="header-link">
+                        <img src={logoImg} className="header-img" alt="indicAI" />
+                    </div>
+                </div>
+                <Greeting loggedId={props.loggedId} />
+            </div>
             <div className="padding-top-bottom-offset">
                 <MaterialTable
                     columns={columns}
                     data={query =>
                         new Promise((resolve, reject) => {
-                            api.get(`users?search=${query.search}&per_page=${query.pageSize}&page=${query.page + 1}`, headers)
+                            api.get(`users?search=${query.search}&per_page=${query.pageSize}&page=${query.page + 1}`, props.headers)
                                 .then(response => {
+                                    console.log("get data")
                                     resolve({
                                         data: response.data.items,
                                         page: response.data._meta.page - 1,
                                         totalCount: response.data._meta.total_items,
                                     })
                                 }).catch(error => {
-                                    alert(error);
                                     reject()
                                 })
                         })
@@ -84,7 +120,7 @@ export default function DashBoard() {
                                         "username": newData.username,
                                         "password": "rafael",
                                         "rg": newData.rg
-                                    }, headers)
+                                    }, props.headers)
                                     .then(response => {
                                         resolve()
                                     }).catch(error => {
@@ -98,7 +134,7 @@ export default function DashBoard() {
                                     {
                                         "rg": newData.rg
 
-                                    }, headers)
+                                    }, props.headers)
                                     .then(response => {
                                         resolve()
                                     }).catch(error => {
@@ -109,7 +145,7 @@ export default function DashBoard() {
                         onRowDelete: oldData =>
                             new Promise((resolve, reject) => {
                                 api.delete(`users/${oldData.id}`,
-                                    headers)
+                                props.headers)
                                     .then(response => {
                                         resolve()
                                     }).catch(error => {
@@ -117,7 +153,7 @@ export default function DashBoard() {
                                         reject()
                                     })
                             }),
-                    }}            
+                    }}
                     title="Pacientes"
                     detailPanel={[
                         {
@@ -139,10 +175,62 @@ export default function DashBoard() {
                     onRowClick={(event, rowData, togglePanel) => togglePanel()}
                     icons={tableIcons}
                     options={{
-                        exportButton: true
+                        exportButton: true,
+                        addRowPosition: 'first'
                     }}
                 />
             </div>
         </div>
+    )
+}
+
+function ShowApp(props) {
+    const loggedId = props.loggedId;
+    const history = useHistory();
+    
+
+    if (loggedId) {
+        console.log("logado")
+        return(
+        <>
+            <Table loggedId={loggedId} headers={props.headers}/>
+        </>)
+        
+    } else if (loggedId === false) {
+        console.log("Nao logado")
+
+        history.push('/login')
+    }
+
+    return null
+}
+
+export default function DashBoard() {
+    const [id, setId] = useState(null);
+    
+    
+    const token = localStorage.getItem('token');
+    const headers = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
+    useEffect(() => {
+        api.get('tokens', headers)
+        .then(response => {
+            setId(response.data.id);
+        }).catch(error => {
+            setId(false);
+            
+        })
+    }, [headers]);
+
+    return (
+        <>
+        
+        <ShowApp loggedId={id} headers={headers}/>
+        
+        </>
     )
 }

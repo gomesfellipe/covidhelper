@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashBoard from './pages/DashBoard';
 import AppIndex3 from './pages/AppIndex3';
+import PrivateRoute from './components/PrivateRoute';
 
 
 export default function Routes() {
@@ -15,8 +16,8 @@ export default function Routes() {
                 <Route path="/" exact component={Index}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/register" component={Register}/>
-                <Route path="/dashboard" component={DashBoard}/>
-                <Route path="/appindex3" component={AppIndex3}/>
+                <PrivateRoute path="/dashboard" component={DashBoard}/>
+                <PrivateRoute path="/appindex3" component={AppIndex3}/>
             </Switch>
         </BrowserRouter>
     );
