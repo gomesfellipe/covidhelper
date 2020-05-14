@@ -80,6 +80,7 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(140))
     rg = db.Column(db.Integer)
+    attendances = db.relationship('Attendance', backref='pacient', lazy='dynamic')
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     access = db.Column(db.Integer, default=0)
@@ -103,6 +104,11 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
 
     def promote_to_admin(self):
         return self.access==4
+
+    def add_attendance(self, temperature):
+        attendance = Attendance(pacient=self, temperature=temperature)
+        db.session.commit()
+        return attendance
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -164,6 +170,37 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
+
+class Attendance(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    temperature = db.Column(db.Float(10, 2))
+    hemacias = db.Column(db.Float(10, 2))
+    hematocritos = db.Column(db.Float(10, 2))
+    hemoglobinas = db.Column(db.Float(10, 2))
+    vcm = db.Column(db.Float(10, 2))
+    hcm = db.Column(db.Float(10, 2))
+    chcm = db.Column(db.Float(10, 2))
+    rdw = db.Column(db.Float(10, 2))
+    eritoblastos = db.Column(db.Integer)
+    leucocitos = db.Column(db.Integer)
+    mielocitos = db.Column(db.Integer)
+    metamielocitos = db.Column(db.Integer)
+    bastonetes = db.Column(db.Integer)
+    segmentados = db.Column(db.Integer)
+    neutrofilos_totais = db.Column(db.Integer)
+    eosinofilos = db.Column(db.Integer)
+    basofilos = db.Column(db.Integer)
+    linfocitos = db.Column(db.Integer)
+    monocitos = db.Column(db.Integer)
+    plasmocitos = db.Column(db.Integer)
+    pcr = db.Column(db.Float(10, 2))
+    plaquetas = db.Column(db.Float(10, 2))
+    vmp = db.Column(db.Float(10, 2))
+
+    score = db.Column(db.Float(10, 2))
+    
 
 @login.user_loader
 def load_user(id):

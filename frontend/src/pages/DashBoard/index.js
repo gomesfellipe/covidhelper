@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 //import HeaderApp from '../../components/HeaderApp';
@@ -159,16 +159,16 @@ function Table(props) {
                         {
                             tooltip: 'Show Name',
                             render: rowData => {
-                                return (
-                                    <div
-                                        style={{
-                                            fontSize: 30,
-                                            textAlign: 'center'
-                                        }}
-                                    >
-                                        {rowData.username}
-                                    </div>
-                                )
+                                    return (
+                                        <div
+                                            style={{
+                                                fontSize: 30,
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            {rowData.username}
+                                        </div>
+                                    )  
                             },
                         }
                     ]}
@@ -182,27 +182,6 @@ function Table(props) {
             </div>
         </div>
     )
-}
-
-function ShowApp(props) {
-    const loggedId = props.loggedId;
-    const history = useHistory();
-    
-
-    if (loggedId) {
-        console.log("logado")
-        return(
-        <>
-            <Table loggedId={loggedId} headers={props.headers}/>
-        </>)
-        
-    } else if (loggedId === false) {
-        console.log("Nao logado")
-
-        history.push('/login')
-    }
-
-    return null
 }
 
 export default function DashBoard() {
@@ -222,14 +201,13 @@ export default function DashBoard() {
             setId(response.data.id);
         }).catch(error => {
             setId(false);
-            
         })
     }, [headers]);
 
     return (
         <>
         
-        <ShowApp loggedId={id} headers={headers}/>
+        <Table loggedId={id} headers={headers}/>
         
         </>
     )
