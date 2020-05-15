@@ -38,44 +38,9 @@ class PaginatedAPIMixin(object):
         return data
 
 
-class Hospital(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    address = db.Column(db.String(140))
-    uti_places = db.Column(db.Integer)
-    care_places = db.Column(db.Integer)
-    available_uti_places = db.Column(db.Integer)
-    available_care_places = db.Column(db.Integer)
-
-    users = db.relationship('User', secondary=users, lazy='dynamic',
-        backref=db.backref('hospitals', lazy='dynamic'))
-
-    def set_manager(self, user):
-        if user.is_manager_of(self):
-            return None
-        user.hospitals.append(self)
-        user.promote_to_manager()
-        db.session.commit()
-        return None
-
-    def get_managers(self):
-        return self.users.all()
-
-    @staticmethod
-    def get_by_id(id):
-        return Hospital.query.filter_by(id=id).first()
-
-    @staticmethod
-    def get_by_name(name):
-        return Hospital.query.filter_by(name=name).first()
-
-    def __repr__(self):
-        return '<Hospital {}>'.format(self.name)
-
-
 class User(UserMixin, PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    attendances = db.relationship('Attendance', backref='pacient', lazy='dynamic')
+    
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
@@ -86,6 +51,7 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     token_expiration = db.Column(db.DateTime)
     access = db.Column(db.Integer, default=0)
     score = db.Column(db.Float(10, 2))
+
 
     def is_manager_of(self, hospital):
         return self.hospitals.filter(
@@ -106,8 +72,8 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     def promote_to_admin(self):
         return self.access==4
 
-    def add_attendance(self, temperature):
-        attendance = Attendance(pacient=self, temperature=temperature)
+    def add_attendance(self, hospital, responsible, temperature):
+        attendance = Attendance(pacient=self, hospital=hospital, responsible=responsible, temperature=temperature)
         db.session.commit()
         return attendance
 
@@ -174,9 +140,16 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
 
 class Attendance(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    pacient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    responsible_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    pacient = db.relationship('User', foreign_keys=[pacient_id], backref='attendances')
+    responsible = db.relationship('User', foreign_keys=[responsible_id])
+
+    hospital_id = db.Column(db.Integer, db.ForeignKey('hospital.id'))
     
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
     temperature = db.Column(db.Numeric)
     hemacias = db.Column(db.Float(10, 2))
     hematocritos = db.Column(db.Float(10, 2))
@@ -217,6 +190,43 @@ class Attendance(PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return '<Attendance {}>'.format(self.id)
+
+
+class Hospital(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    attendances = db.relationship('Attendance', backref='hospital', lazy='dynamic')
+    name = db.Column(db.String(50))
+    address = db.Column(db.String(140))
+    uti_places = db.Column(db.Integer)
+    care_places = db.Column(db.Integer)
+    available_uti_places = db.Column(db.Integer)
+    available_care_places = db.Column(db.Integer)
+
+    users = db.relationship('User', secondary=users, lazy='dynamic',
+        backref=db.backref('hospitals', lazy='dynamic'))
+
+    def set_manager(self, user):
+        if user.is_manager_of(self):
+            return None
+        user.hospitals.append(self)
+        user.promote_to_manager()
+        db.session.commit()
+        return None
+
+    def get_managers(self):
+        return self.users.all()
+
+    @staticmethod
+    def get_by_id(id):
+        return Hospital.query.filter_by(id=id).first()
+
+    @staticmethod
+    def get_by_name(name):
+        return Hospital.query.filter_by(name=name).first()
+
+    def __repr__(self):
+        return '<Hospital {}>'.format(self.name)
+
 
 @login.user_loader
 def load_user(id):

@@ -1,8 +1,8 @@
 """first
 
-Revision ID: 455aaa8b728a
+Revision ID: 9b280aca8aa9
 Revises: 
-Create Date: 2020-05-15 01:41:09.310088
+Create Date: 2020-05-15 18:04:41.908031
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '455aaa8b728a'
+revision = '9b280aca8aa9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,7 +46,9 @@ def upgrade():
     op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
     op.create_table('attendance',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('pacient_id', sa.Integer(), nullable=True),
+    sa.Column('responsible_id', sa.Integer(), nullable=True),
+    sa.Column('hospital_id', sa.Integer(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('temperature', sa.Numeric(), nullable=True),
     sa.Column('hemacias', sa.Float(precision=10, asdecimal=2), nullable=True),
@@ -72,7 +74,9 @@ def upgrade():
     sa.Column('plaquetas', sa.Float(precision=10, asdecimal=2), nullable=True),
     sa.Column('vmp', sa.Float(precision=10, asdecimal=2), nullable=True),
     sa.Column('score', sa.Float(precision=10, asdecimal=2), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['hospital_id'], ['hospital.id'], ),
+    sa.ForeignKeyConstraint(['pacient_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['responsible_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_attendance_timestamp'), 'attendance', ['timestamp'], unique=False)
