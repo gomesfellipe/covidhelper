@@ -75,12 +75,13 @@ class Hospital(db.Model):
 
 class User(UserMixin, PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    attendances = db.relationship('Attendance', backref='pacient', lazy='dynamic')
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(140))
     rg = db.Column(db.Integer)
-    attendances = db.relationship('Attendance', backref='pacient', lazy='dynamic')
+    
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     access = db.Column(db.Integer, default=0)
@@ -171,11 +172,12 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 
-class Attendance(db.Model):
+class Attendance(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    temperature = db.Column(db.Float(10, 2))
+    temperature = db.Column(db.Numeric)
     hemacias = db.Column(db.Float(10, 2))
     hematocritos = db.Column(db.Float(10, 2))
     hemoglobinas = db.Column(db.Float(10, 2))
@@ -201,6 +203,20 @@ class Attendance(db.Model):
 
     score = db.Column(db.Float(10, 2))
     
+    @staticmethod
+    def get_by_id(id):
+        return Attendance.query.filter_by(id=id).first()
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'username': self.pacient.username,
+            'timestamp': self.timestamp,
+        }
+        return data
+
+    def __repr__(self):
+        return '<Attendance {}>'.format(self.id)
 
 @login.user_loader
 def load_user(id):
