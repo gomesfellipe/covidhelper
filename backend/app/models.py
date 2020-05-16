@@ -45,6 +45,8 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(140))
+    gender = db.Column(db.Integer)
+    age = db.Column(db.Integer)
     rg = db.Column(db.Integer)
     
     token = db.Column(db.String(32), index=True, unique=True)
@@ -150,7 +152,12 @@ class Attendance(PaginatedAPIMixin, db.Model):
     
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
+    #General info
+    height= db.Column(db.Integer)
+    weight = db.Column(db.Integer)
     temperature = db.Column(db.Numeric)
+
+    #CBC + PCR
     hemacias = db.Column(db.Float(10, 2))
     hematocritos = db.Column(db.Float(10, 2))
     hemoglobinas = db.Column(db.Float(10, 2))
@@ -170,11 +177,24 @@ class Attendance(PaginatedAPIMixin, db.Model):
     linfocitos = db.Column(db.Integer)
     monocitos = db.Column(db.Integer)
     plasmocitos = db.Column(db.Integer)
-    pcr = db.Column(db.Float(10, 2))
     plaquetas = db.Column(db.Float(10, 2))
     vmp = db.Column(db.Float(10, 2))
+    pcr = db.Column(db.Float(10, 2))
 
-    score = db.Column(db.Float(10, 2))
+    #Respiratory Infections
+    influenza = db.Column(db.Integer)
+    parainfluenza = db.Column(db.Integer)
+    h1n1 = db.Column(db.Integer)
+    chlamidophila_plenumonae = db.Column(db.Integer)
+    rhinovirus_enterovirus = db.Column(db.Integer)
+    virus_sincicial = db.Column(db.Integer)
+    outros_coranavirus = db.Column(db.Integer)
+    outras_infeccoes_respiratorias = db.Column(db.Integer)
+
+    #Model prediction and medical confirmation
+    sars_cov_2_labtest_score = db.Column(db.Float(10, 2))
+    sars_cov_2_labtest_pred = db.Column(db.Integer)
+    sars_cov_2_confirmation = db.Column(db.Integer)
     
     @staticmethod
     def get_by_id(id):

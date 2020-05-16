@@ -1,8 +1,8 @@
-"""first
+"""first commit
 
-Revision ID: 9b280aca8aa9
+Revision ID: f63cabccb7f8
 Revises: 
-Create Date: 2020-05-15 18:04:41.908031
+Create Date: 2020-05-16 11:04:51.358387
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9b280aca8aa9'
+revision = 'f63cabccb7f8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,6 +34,8 @@ def upgrade():
     sa.Column('password_hash', sa.String(length=128), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('name', sa.String(length=140), nullable=True),
+    sa.Column('gender', sa.Integer(), nullable=True),
+    sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('rg', sa.Integer(), nullable=True),
     sa.Column('token', sa.String(length=32), nullable=True),
     sa.Column('token_expiration', sa.DateTime(), nullable=True),
@@ -50,6 +52,8 @@ def upgrade():
     sa.Column('responsible_id', sa.Integer(), nullable=True),
     sa.Column('hospital_id', sa.Integer(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
+    sa.Column('height', sa.Integer(), nullable=True),
+    sa.Column('weight', sa.Integer(), nullable=True),
     sa.Column('temperature', sa.Numeric(), nullable=True),
     sa.Column('hemacias', sa.Float(precision=10, asdecimal=2), nullable=True),
     sa.Column('hematocritos', sa.Float(precision=10, asdecimal=2), nullable=True),
@@ -70,10 +74,20 @@ def upgrade():
     sa.Column('linfocitos', sa.Integer(), nullable=True),
     sa.Column('monocitos', sa.Integer(), nullable=True),
     sa.Column('plasmocitos', sa.Integer(), nullable=True),
-    sa.Column('pcr', sa.Float(precision=10, asdecimal=2), nullable=True),
     sa.Column('plaquetas', sa.Float(precision=10, asdecimal=2), nullable=True),
     sa.Column('vmp', sa.Float(precision=10, asdecimal=2), nullable=True),
-    sa.Column('score', sa.Float(precision=10, asdecimal=2), nullable=True),
+    sa.Column('pcr', sa.Float(precision=10, asdecimal=2), nullable=True),
+    sa.Column('influenza', sa.Integer(), nullable=True),
+    sa.Column('parainfluenza', sa.Integer(), nullable=True),
+    sa.Column('h1n1', sa.Integer(), nullable=True),
+    sa.Column('chlamidophila_plenumonae', sa.Integer(), nullable=True),
+    sa.Column('rhinovirus_enterovirus', sa.Integer(), nullable=True),
+    sa.Column('virus_sincicial', sa.Integer(), nullable=True),
+    sa.Column('outros_coranavirus', sa.Integer(), nullable=True),
+    sa.Column('outras_infeccoes_respiratorias', sa.Integer(), nullable=True),
+    sa.Column('sars_cov_2_labtest_score', sa.Float(precision=10, asdecimal=2), nullable=True),
+    sa.Column('sars_cov_2_labtest_pred', sa.Integer(), nullable=True),
+    sa.Column('sars_cov_2_confirmation', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['hospital_id'], ['hospital.id'], ),
     sa.ForeignKeyConstraint(['pacient_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['responsible_id'], ['user.id'], ),
