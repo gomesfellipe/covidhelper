@@ -211,6 +211,46 @@ class Attendance(PaginatedAPIMixin, db.Model):
             'id': self.id,
             'userid': self.pacient.userid,
             'timestamp': self.timestamp,
+            'height': self.height,
+            'weight': self.weight,
+            'temperature': str(self.temperature),
+            
+            'cbc': {
+                'hemacias': str(self.hemacias),
+                'hematocritos': str(self.hematocritos),
+                'hemoglobinas': str(self.hemoglobinas),
+                'vcm': str(self.vcm),
+                'hcm': str(self.hcm),
+                'chcm': str(self.chcm),
+                'rdw': str(self.rdw),
+                'eritoblastos': self.eritoblastos,
+                'leucocitos': self.leucocitos,
+                'mielocitos': self.mielocitos,
+                'metamielocitos': self.metamielocitos,
+                'bastonetes': self.bastonetes,
+                'segmentados': self.segmentados,
+                'neutrofilos_totais': self.neutrofilos_totais,
+                'eosinofilos': self.eosinofilos,
+                'basofilos': self.basofilos,
+                'linfocitos': self.linfocitos,
+                'monocitos': self.monocitos,
+                'plasmocitos': self.plasmocitos,
+                'plaquetas': str(self.plaquetas),
+                'vmp': str(self.vmp)
+            },
+
+            'pcr': str(self.pcr),
+            
+            'respiratory_infections': {
+                'influenza': self.influenza,
+                'parainfluenza': self.parainfluenza,
+                'h1n1': self.h1n1,
+                'chlamidophila_plenumonae': self.chlamidophila_plenumonae,
+                'rhinovirus_enterovirus': self.rhinovirus_enterovirus,
+                'virus_sincicial': self.virus_sincicial,
+                'outros_coranavirus': self.outros_coranavirus,
+                'outras_infeccoes_respiratorias': self.outras_infeccoes_respiratorias,
+            }
         }
         return data
 
