@@ -15,7 +15,7 @@ import Text from '../../components/Text';
 import Image from '../../components/Image';
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
 
     const history = useHistory();
@@ -27,7 +27,7 @@ export default function Login() {
             { 
                 auth: 
                 {
-                    username:username, 
+                    username:userid, 
                     password:password
                 }
             }
@@ -53,9 +53,9 @@ export default function Login() {
                 <Box>
                     <form onSubmit={handleLogin}>
                         <input
-                            placeholder="Nome de usuario"
-                            value={username}
-                            onChange={e => setUsername(e.target.value)}
+                            placeholder="ID do usuario"
+                            value={userid}
+                            onChange={e => setUserid(e.target.value)}
                         />
                         <input
                             type="password"
