@@ -14,11 +14,11 @@ import Text from '../../components/Text';
 import Image from '../../components/Image';
 
 export default function Register() {
-    const [username, setUsername] = useState('');
+    const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [gender, setGender] = useState('');
     const [name, setName] = useState('');
-    const [rg, setRg] = useState('');
+    const [access, setAccess] = useState(0);
 
     const history = useHistory();
 
@@ -27,11 +27,11 @@ export default function Register() {
 
         const data = (
             { 
-                username:username, 
+                userid:userid, 
                 password:password,
-                email:email,
+                gender:gender,
                 name:name,
-                rg:rg
+                access:access
             }
         );
 
@@ -53,9 +53,9 @@ export default function Register() {
                 <Box>
                     <form onSubmit={handleRegister}>
                         <input
-                            placeholder="Nome de usuario"
-                            value={username}
-                            onChange={e => setUsername(e.target.value)}
+                            placeholder="ID do usuario"
+                            value={userid}
+                            onChange={e => setUserid(e.target.value)}
                         />
                         <input
                             type="password"
@@ -64,22 +64,24 @@ export default function Register() {
                             onChange={e => setPassword(e.target.value)}
                         />
                         <input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        <input
                             placeholder="Nome"
                             value={name}
                             onChange={e => setName(e.target.value)}
                         />
-                        <input
-                            type="password"
-                            placeholder="R.G."
-                            value={rg}
-                            onChange={e => setRg(e.target.value)}
-                        />
+                        <select 
+                            onChange={e => setGender(e.target.value)}>
+                            <option value="undefined">Genero Nao Informado</option>
+                            <option value="female">Genero Feminino</option>
+                            <option value="male">Genero Masculino</option>
+                        </select>
+                        <select 
+                            onChange={e => setAccess(e.target.value)}>
+                            <option value={0}>Usuario</option>
+                            <option value={1}>Paciente</option>
+                            <option value={2}>Enfermeiro</option>
+                            <option value={3}>Medico</option>
+                            <option value={4}>Administrador</option>
+                        </select>
                         <button type="submit" className="button">Cadastrar</button>
                         <Link to="/login"><Text size="small">Ja sou cadastrado</Text></Link>
                     </form>

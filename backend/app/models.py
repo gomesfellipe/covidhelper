@@ -40,19 +40,14 @@ class PaginatedAPIMixin(object):
 
 class User(UserMixin, PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    
-    username = db.Column(db.String(64), index=True, unique=True)
+    userid = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    email = db.Column(db.String(120), index=True, unique=True)
     name = db.Column(db.String(140))
-    gender = db.Column(db.Integer)
-    age = db.Column(db.Integer)
-    rg = db.Column(db.Integer)
+    gender = db.Column(db.String(32))
+    access = db.Column(db.Integer, default=0)
     
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    access = db.Column(db.Integer, default=0)
-    score = db.Column(db.Float(10, 2))
 
 
     def is_manager_of(self, hospital):
@@ -60,22 +55,33 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
             users.c.hospital_id == hospital.id).count() > 0
 
     def promote_to_user(self):
-        return self.access==0
+        self.access==0
+        db.session.commit()
+        return self
 
     def promote_to_pacient(self):
-        return self.access==1
+        self.access==1
+        db.session.commit()
+        return self
 
     def promote_to_nurse(self):
-        return self.access==2    
+        self.access==2
+        db.session.commit()
+        return self  
 
     def promote_to_manager(self):
-        return self.access==3
+        self.access==3
+        db.session.commit()
+        return self
 
     def promote_to_admin(self):
-        return self.access==4
+        self.access==4
+        db.session.commit()
+        return self
 
     def add_attendance(self, hospital, responsible, temperature):
         attendance = Attendance(pacient=self, hospital=hospital, responsible=responsible, temperature=temperature)
+        db.session.add(attendance)
         db.session.commit()
         return attendance
 
@@ -85,7 +91,7 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def get_token(self, expires_in=3600):
+    def get_token(self, expires_in=36000):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
             return self.token
@@ -109,16 +115,16 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         return User.query.filter_by(id=id).first()
 
     @staticmethod
-    def get_by_username(username):
-        return User.query.filter_by(username=username).first()
+    def get_by_userid(userid):
+        return User.query.filter_by(userid=userid).first()
 
     def to_dict(self, include_email=False, include_rg=False):
         data = {
             'id': self.id,
-            'username': self.username,
-            'rg': self.rg,
+            'userid': self.userid,
+            'name': self.name,
+            'gender': self.gender,
             'access': self.access,
-            'score': self.score,
             '_links': {
                 'self': url_for('api.get_user', id=self.id)
             }
@@ -130,14 +136,14 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data, new_user=False):
-        for field in ['username', 'name', 'rg', 'access', 'score']:
+        for field in ['userid', 'name', 'gender', 'access']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.set_password(data['password'])
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}>'.format(self.userid)
 
 
 class Attendance(PaginatedAPIMixin, db.Model):
@@ -203,7 +209,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'username': self.pacient.username,
+            'userid': self.pacient.userid,
             'timestamp': self.timestamp,
         }
         return data

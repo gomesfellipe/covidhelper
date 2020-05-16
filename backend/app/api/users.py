@@ -40,7 +40,7 @@ def get_users():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
     search = request.args.get('search', '', type=str)
-    data = User.to_collection_dict(User.query.filter(User.username.like("%{}%".format(search))), page, per_page, 'api.get_users')
+    data = User.to_collection_dict(User.query.filter(User.userid.like("%{}%".format(search))).filter(User.name.like("%{}%".format(search))), page, per_page, 'api.get_users')
     return jsonify(data)
 
 
@@ -51,14 +51,10 @@ def create_user():
     """
 
     data = request.get_json() or {}
-    if 'username' not in data or 'password' not in data or 'rg' not in data:
-        return bad_request('must include username, password and rg fields')
-    if User.query.filter_by(username=data['username']).first():
-        return bad_request('please use a different username')
-    if User.query.filter_by(rg=data['rg']).first():
-        return bad_request('rg already registered')
-    if 'email' in data and User.query.filter_by(email=data['email']).first():
-        return bad_request('email already registered')
+    if 'userid' not in data or 'password' not in data or 'gender' not in data or 'name' not in data or 'access' not in data:
+        return bad_request('must include id, password, gender, name and access fields')
+    if User.query.filter_by(userid=data['userid']).first():
+        return bad_request('please use a different userid')
     user = User()
     user.from_dict(data, new_user=True)
     db.session.add(user)
@@ -80,11 +76,8 @@ def update_user(id):
         abort(403)
     user = User.query.get_or_404(id)
     data = request.get_json() or {}
-    if 'username' in data:
-        return bad_request('you can not change your username')
-    if 'email' in data and data['email'] != user.email and \
-            User.query.filter_by(email=data['email']).first():
-        return bad_request('please use a different email address')
+    if 'userid' in data:
+        return bad_request('you can not change your userid')
     user.from_dict(data, new_user=False)
     db.session.commit()
     return jsonify(user.to_dict())
