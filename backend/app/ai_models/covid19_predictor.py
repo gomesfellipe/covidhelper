@@ -97,10 +97,18 @@ class labtest_predictor:
         #### Pegar variaveis necessárias para o plot (import csv)
         
         #### Nome dos plots
+        
         plot_1_name = 'app/ai_models/temp/probacurve-'+str(patient_id)+'.png'
         plot_2_name = 'app/ai_models/temp/shap-'+str(patient_id)+'.png'
         plot_3_name = 'app/ai_models/temp/dist-'+str(patient_id)+'.png'
         plot_4_name = 'app/ai_models/temp/mapa-'+str(patient_id)+'.png'
+
+
+        #URL API PLOTS
+        plot_1_api = "http://localhost:5000/api/media/probacurve-"+str(patient_id)+".png"
+        plot_2_api = "http://localhost:5000/api/media/shap-"+str(patient_id)+".png"
+        plot_3_api = "http://localhost:5000/api/media/dist-"+str(patient_id)+".png"
+        plot_4_api = "http://localhost:5000/api/media/mapa-"+str(patient_id)+".png"
         
         #### Configurações gerais do plt
         DPI_IMAGES=100
@@ -163,7 +171,7 @@ class labtest_predictor:
         target_0 = self.train_df[self.train_df['target'] == 0][['Leucócitos', 'Plaquetas', 'Hemácias', 'Eosinófilos']]
         target_1 = self.train_df[self.train_df['target'] == 1][['Leucócitos', 'Plaquetas', 'Hemácias', 'Eosinófilos']]
         # Plot
-        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(7,5))
+        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10,5))
         # Plot settings
         #sns.set_color_codes()
         #st = fig.suptitle("Distribuição das variáveis importantes para o modelo", fontweight='bold')
@@ -247,10 +255,10 @@ class labtest_predictor:
         # Retornar
         model_result = {'prediction': pred,
                         'probability': str(round(prob*100, 2)),
-                        'probacurve': plot_1_name,
-                        'shap_img': plot_2_name,
-                        'dist_img': plot_3_name,
-                        'mapa_img': plot_4_name}
+                        'probacurve': plot_1_api,
+                        'shap_img': plot_2_api,
+                        'dist_img': plot_3_api,
+                        'mapa_img': plot_4_api}
         return model_result
 
 
