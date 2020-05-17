@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
 import HeaderApp from '../../components/HeaderApp';
@@ -43,15 +44,16 @@ const tableIcons = {
 
 const columns = [
     { title: "DATA", field: "timestamp", editable: "never" },
-    { title: "NOME", field: "name", editable: "onAdd" },
-    { title: "ID", field: "userid" },
-    { title: "IDADE", field: "age", editable: "never" },
+    { title: "ID", field: "userid", editable: "never" },
+    { title: "NOME", field: "name" },
+    { title: "IDADE", field: "age" },
+    { title: "PESO", field: "weight" },
     { title: "PREDICAO COVID", field: "sars_cov_2_labtest_pred", editable: "never" },
     { title: "CONFIRMACAO", field: "sars_cov_2_confirmation", editable: "never" },
-    
 ];
 
 function Table(props) {
+    const history = useHistory();
     return (
         <div>
             <HeaderApp />
@@ -74,22 +76,7 @@ function Table(props) {
                         })
                     }
                     editable={{
-                        onRowAdd: newData =>
-                            new Promise((resolve, reject) => {
-                                api.post('users',
-                                    {
-                                        "username": newData.username,
-                                        "password": "rafael",
-                                        "rg": newData.rg
-                                    }, props.headers)
-                                    .then(response => {
-                                        resolve()
-                                    }).catch(error => {
-                                        alert(error);
-                                        reject()
-                                    })
-                            }),
-                        onRowUpdate: (newData, oldData) =>
+                        /* onRowUpdate: (newData, oldData) =>
                             new Promise((resolve, reject) => {
                                 api.put(`users/${oldData.id}`,
                                     {
@@ -102,10 +89,10 @@ function Table(props) {
                                         alert(error);
                                         reject()
                                     })
-                            }),
+                            }), */
                         onRowDelete: oldData =>
                             new Promise((resolve, reject) => {
-                                api.delete(`users/${oldData.id}`,
+                                api.delete(`attendances/${oldData.id}`,
                                 props.headers)
                                     .then(response => {
                                         resolve()
@@ -116,7 +103,7 @@ function Table(props) {
                             }),
                     }}
                     title="Atendimentos"
-                    detailPanel={[
+                    /* detailPanel={[
                         {
                             tooltip: 'Show Name',
                             render: rowData => {
@@ -132,13 +119,21 @@ function Table(props) {
                                     )  
                             },
                         }
-                    ]}
-                    onRowClick={(event, rowData, togglePanel) => togglePanel()}
+                    ]} */
+                    onRowClick={(event, rowData, togglePanel) => {console.log(`Clicou na linha ${rowData.id}`)}}
                     icons={tableIcons}
                     options={{
                         exportButton: true,
                         addRowPosition: 'first'
                     }}
+                    actions={[
+                        {
+                          icon: '+',
+                          tooltip: 'Novo',
+                          isFreeAction: true,
+                          onClick: () => {history.push('/attendances/new')},
+                        }
+                      ]}
                 />
             </div>
         </div>
