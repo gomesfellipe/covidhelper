@@ -159,6 +159,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     #General info
+    age = db.Column(db.Integer)
     height= db.Column(db.Integer)
     weight = db.Column(db.Integer)
     temperature = db.Column(db.Numeric)
@@ -211,6 +212,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
             'id': self.id,
             'userid': self.pacient.userid,
             'timestamp': self.timestamp,
+            'age': self.age,
             'height': self.height,
             'weight': self.weight,
             'temperature': str(self.temperature),
