@@ -42,9 +42,13 @@ const tableIcons = {
 };
 
 const columns = [
-    { title: "Username", field: "username", editable: "onAdd" },
-    { title: "RG", field: "rg" },
-    { title: "Score", field: "score", editable: "never" }
+    { title: "DATA", field: "timestamp", editable: "never" },
+    { title: "NOME", field: "name", editable: "onAdd" },
+    { title: "ID", field: "userid" },
+    { title: "IDADE", field: "age", editable: "never" },
+    { title: "PREDICAO COVID", field: "sars_cov_2_labtest_pred", editable: "never" },
+    { title: "CONFIRMACAO", field: "sars_cov_2_confirmation", editable: "never" },
+    
 ];
 
 function Table(props) {
@@ -56,7 +60,7 @@ function Table(props) {
                     columns={columns}
                     data={query =>
                         new Promise((resolve, reject) => {
-                            api.get(`users?search=${query.search}&per_page=${query.pageSize}&page=${query.page + 1}`, props.headers)
+                            api.get(`attendances?search=${query.search}&per_page=${query.pageSize}&page=${query.page + 1}`, props.headers)
                                 .then(response => {
                                     console.log("get data")
                                     resolve({
@@ -111,7 +115,7 @@ function Table(props) {
                                     })
                             }),
                     }}
-                    title="Pacientes"
+                    title="Atendimentos"
                     detailPanel={[
                         {
                             tooltip: 'Show Name',
