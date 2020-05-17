@@ -22,5 +22,15 @@ def predict_labtest(id):
     patient_prediction = patient_cbc_predictor.predict(cbc_to_model) 
 
 
-    return jsonify(patient_prediction)
+    pred = patient_prediction['pred_class']
+    prob = patient_prediction['pred_proba']
+    
+    patient_interpretation = patient_cbc_predictor.model_interpretation(patient_dict['id'], 
+                                                                        cbc_to_model, 
+                                                                        pred, 
+                                                                        prob, 
+                                                                        patient_cbc_predictor.classifier)
+
+
+    return jsonify(patient_interpretation)
 

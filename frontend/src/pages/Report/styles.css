@@ -21,3 +21,39 @@
 .report p {
     padding: 10px 0;
 }
+
+.report-item {
+    -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.48);
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.plot-box-50{
+    min-width: 350px;
+    width: 40%;
+}
+
+.box-50{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.plot-header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;  
+}
+.plot-header h3{
+    font-weight: lighter;
+    color: #386796;
+    size: 16px;
+    text-align: left;
+    padding: 12px;
+}
+
+.clearer{
+    clear: both;
+}
