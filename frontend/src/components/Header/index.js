@@ -11,7 +11,7 @@ export default function Header() {
                 <div className="header-link">
                     <img src={logoImg} className="header-img" alt="indicAI" />
                 </div>
-                <div className="header-link">
+                {/* <div className="header-link">
                     Problema
                 </div>
                 <div className="header-link">
@@ -19,7 +19,7 @@ export default function Header() {
                 </div>
                 <div className="header-link">
                     Equipe
-                </div>
+                </div> */}
             </div>
             <div className="header-container-item">
                 <div className="header-link">
