@@ -152,7 +152,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
     responsible_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     pacient = db.relationship('User', foreign_keys=[pacient_id], backref='attendances')
-    responsible = db.relationship('User', foreign_keys=[responsible_id])
+    responsible = db.relationship('User', foreign_keys=[responsible_id], backref='responsibles')
 
     hospital_id = db.Column(db.Integer, db.ForeignKey('hospital.id'))
     
@@ -211,6 +211,8 @@ class Attendance(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'userid': self.pacient.userid,
+            'name': self.pacient.name,
+            'gender': self.pacient.gender,
             'timestamp': self.timestamp,
             'age': self.age,
             'height': self.height,
