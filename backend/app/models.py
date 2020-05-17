@@ -79,10 +79,8 @@ class User(UserMixin, PaginatedAPIMixin, db.Model):
         db.session.commit()
         return self
 
-    def add_attendance(self, hospital, responsible, temperature):
-        attendance = Attendance(pacient=self, hospital=hospital, responsible=responsible, temperature=temperature)
-        db.session.add(attendance)
-        db.session.commit()
+    def add_attendance(self): #, hospital, responsible, temperature
+        attendance = Attendance(pacient=self) #, hospital=hospital, responsible=responsible, temperature=temperature
         return attendance
 
     def set_password(self, password):
@@ -259,7 +257,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['userid', 'name', 'gender', 'timestamp', 'timestamp', 'age', 'height', 'temperature']:
+        for field in ['timestamp', 'timestamp', 'age', 'height', 'temperature']:
             if field in data:
                 setattr(self, field, data[field])
 

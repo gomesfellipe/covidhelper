@@ -77,6 +77,7 @@ export default function NewAttendance() {
     async function handleSubmit(e) {
         e.preventDefault();
         const data = {
+            userid: userid,
             name: name,
             gender: gender,
             age: age,

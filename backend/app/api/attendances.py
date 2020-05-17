@@ -28,16 +28,20 @@ def create_attendance():
     """
 
     data = request.get_json() or {}
-    print(data)
     #TODO: Verifications
-    attendance = Attendance()
-    print()
-    print()
-    print(attendance.pacient.name)
+    if 'userid' not in data:
+        return bad_request('ID do usuario deve ser preenchido')
+    user = User.get_by_userid(data['userid'])
+    if not user:
+        user = User()
+        user.from_dict(data)
+        db.session.add(user)
+    
+    attendance = user.add_attendance()
     attendance.from_dict(data)
-    print(attendance)
     db.session.add(attendance)
     db.session.commit()
+
     response = jsonify(attendance.to_dict())
     response.status_code = 201
     response.headers['Location'] = url_for('api.create_attendance')
