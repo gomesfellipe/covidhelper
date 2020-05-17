@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 import api from '../../services/api';
 import HeaderApp from '../../components/HeaderApp';
@@ -52,6 +53,7 @@ const columns = [
 ];
 
 function Table(props) {
+    const history = useHistory();
     return (
         <div>
             <HeaderApp />
@@ -118,12 +120,20 @@ function Table(props) {
                             },
                         }
                     ]} */
-                    onRowClick={(event, rowData, togglePanel) => togglePanel()}
+                    onRowClick={(event, rowData, togglePanel) => {console.log(`Clicou na linha ${rowData.id}`)}}
                     icons={tableIcons}
                     options={{
                         exportButton: true,
                         addRowPosition: 'first'
                     }}
+                    actions={[
+                        {
+                          icon: '+',
+                          tooltip: 'Novo',
+                          isFreeAction: true,
+                          onClick: () => {history.push('/attendances/new')},
+                        }
+                      ]}
                 />
             </div>
         </div>
