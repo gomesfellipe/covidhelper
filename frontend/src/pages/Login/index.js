@@ -52,18 +52,20 @@ export default function Login() {
                 </Box>
                 <Box>
                     <form onSubmit={handleLogin}>
-                        <input
+                        <input 
+                            className="full-width"
                             placeholder="ID do usuario"
                             value={userid}
                             onChange={e => setUserid(e.target.value)}
                         />
                         <input
+                            className="full-width"
                             type="password"
                             placeholder="Senha"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
-                        <button type="submit" className="button">Entrar</button>
+                        <button type="submit" className="button-full-width">Entrar</button>
                         <Link to="/register"><Text size="small">Não tenho cadastro</Text></Link>
                     </form>
                 </Box>

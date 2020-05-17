@@ -53,28 +53,33 @@ export default function Register() {
                 <Box>
                     <form onSubmit={handleRegister}>
                         <input
+                            className="full-width"
                             placeholder="ID do usuario"
                             value={userid}
                             onChange={e => setUserid(e.target.value)}
                         />
                         <input
+                            className="full-width"
                             type="password"
                             placeholder="Senha"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                         <input
+                            className="full-width"
                             placeholder="Nome"
                             value={name}
                             onChange={e => setName(e.target.value)}
                         />
                         <select 
+                            className="full-width"
                             onChange={e => setGender(e.target.value)}>
-                            <option value="undefined">Genero Nao Informado</option>
-                            <option value="female">Genero Feminino</option>
-                            <option value="male">Genero Masculino</option>
+                            <option value="indefinido">Genero Nao Informado</option>
+                            <option value="feminino">Genero Feminino</option>
+                            <option value="masculino">Genero Masculino</option>
                         </select>
                         <select 
+                            className="full-width"
                             onChange={e => setAccess(e.target.value)}>
                             <option value={0}>Usuario</option>
                             <option value={1}>Paciente</option>
@@ -82,7 +87,7 @@ export default function Register() {
                             <option value={3}>Medico</option>
                             <option value={4}>Administrador</option>
                         </select>
-                        <button type="submit" className="button">Cadastrar</button>
+                        <button type="submit" className="button-full-width">Cadastrar</button>
                         <Link to="/login"><Text size="small">Ja sou cadastrado</Text></Link>
                     </form>
                 </Box>

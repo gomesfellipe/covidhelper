@@ -21,7 +21,7 @@ button {
     cursor: pointer;
 }
 
-.button {
+.button-full-width {
     vertical-align: middle;
     align-items: center;
     background-color: #ef5d50;
@@ -32,12 +32,26 @@ button {
     transition: filter 0.2s;
 }
 
+.button-full-width:hover {
+    filter: brightness(90%);
+}
+
+.button {
+    vertical-align: middle;
+    align-items: center;
+    background-color: #ef5d50;
+    color: white;
+    height: 80px;
+    border: 0;
+    padding: 20px;
+    transition: filter 0.2s;
+}
+
 .button:hover {
     filter: brightness(90%);
 }
 
 form input, form select {
-    width: 100%;
     padding: 0 24px;
     margin: 5px 0;
     height: 60px;
@@ -46,12 +60,16 @@ form input, form select {
     border-radius: 8px;
 }
 
-form select {
+.full-width {
+    width: 100%;
+}
+
+select {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
 
-form select:-moz-focusring { 
+select:-moz-focusring { 
     color: transparent;
     text-shadow: 0 0 0 #000; 
 }
