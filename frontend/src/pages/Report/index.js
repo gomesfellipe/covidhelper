@@ -6,6 +6,8 @@ import Popup from "reactjs-popup";
 import './styles.css'
 
 import HeaderApp from '../../components/HeaderApp'
+import ResultBox from '../../components/ResultBox'
+
 
 export default function Report() {
     const Tooltip = () => (
@@ -86,15 +88,7 @@ export default function Report() {
                 <h1>Report</h1>
 
 
-                <div className="plot-box-status neg">
-                    <div className="alert-icon">
-                        <img src="alert.png"></img>
-                    </div>
-                    <div className="model_output">
-                        <span class="model-class">NEGATIVO</span>
-                        <span class="model-proba">Probabilidade: 87%</span>
-                    </div>
-                </div>
+                <ResultBox result="NEGATIVO"/>
 
                 <div className="box-50">
                     <div className="report-item plot-box-50">
