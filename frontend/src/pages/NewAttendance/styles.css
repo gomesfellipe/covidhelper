@@ -106,3 +106,35 @@
     top: 0;
     color: #3951b2;
 }
+
+
+
+.radio-float{
+    position: relative;
+    padding: 15px 20px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    outline: none;
+    min-width: 250px;
+    width: 20%;
+    height: 60px;
+    font-size: 13px;
+    -webkit-appearance:none;
+    margin: 18px 5px 0 5px;
+
+  }
+
+  .radio-name input{
+    padding: 13px;
+  }
+
+  .radio-name{
+    pointer-events: none;
+    position: absolute;
+    top: calc(-25%);
+    left: 15px;
+    background-color: white;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 13px;
+}
