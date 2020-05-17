@@ -74,7 +74,7 @@ function Table(props) {
                         })
                     }
                     editable={{
-                        onRowUpdate: (newData, oldData) =>
+                        /* onRowUpdate: (newData, oldData) =>
                             new Promise((resolve, reject) => {
                                 api.put(`users/${oldData.id}`,
                                     {
@@ -87,10 +87,10 @@ function Table(props) {
                                         alert(error);
                                         reject()
                                     })
-                            }),
+                            }), */
                         onRowDelete: oldData =>
                             new Promise((resolve, reject) => {
-                                api.delete(`users/${oldData.id}`,
+                                api.delete(`attendances/${oldData.id}`,
                                 props.headers)
                                     .then(response => {
                                         resolve()
