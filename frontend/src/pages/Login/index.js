@@ -15,7 +15,7 @@ import Text from '../../components/Text';
 import Image from '../../components/Image';
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
 
     const history = useHistory();
@@ -27,7 +27,7 @@ export default function Login() {
             { 
                 auth: 
                 {
-                    username:username, 
+                    username:userid, 
                     password:password
                 }
             }
@@ -52,18 +52,20 @@ export default function Login() {
                 </Box>
                 <Box>
                     <form onSubmit={handleLogin}>
-                        <input
-                            placeholder="Nome de usuario"
-                            value={username}
-                            onChange={e => setUsername(e.target.value)}
+                        <input 
+                            className="full-width"
+                            placeholder="ID do usuario"
+                            value={userid}
+                            onChange={e => setUserid(e.target.value)}
                         />
                         <input
+                            className="full-width"
                             type="password"
                             placeholder="Senha"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
-                        <button type="submit" className="button">Entrar</button>
+                        <button type="submit" className="button-full-width">Entrar</button>
                         <Link to="/register"><Text size="small">Não tenho cadastro</Text></Link>
                     </form>
                 </Box>

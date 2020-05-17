@@ -23,15 +23,13 @@ export default function Header() {
             </div>
             <div className="header-container-item">
                 <div className="header-link">
-                    <button className="button">
+                    <button className="button-full-width">
                         <Link to="/register" className="header-link">Cadastro</Link>
                     </button>
                 </div>
                 <div className="header-link">
                     <Link to="/login" className="header-link">Login</Link>
                 </div>
-                
-                
             </div>
         </div>
     );

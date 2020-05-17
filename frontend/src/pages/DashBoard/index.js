@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
-//import HeaderApp from '../../components/HeaderApp';
-
-import logoImg from '../../assets/logo.png'
+import HeaderApp from '../../components/HeaderApp';
 
 import MaterialTable from "material-table";
 import { forwardRef } from 'react';
@@ -50,50 +47,10 @@ const columns = [
     { title: "Score", field: "score", editable: "never" }
 ];
 
-function UserGreeting(props) {
-    return (
-        <div className="header-container-item">
-            <div className="header-link">
-                <h1>Welcome back!</h1>
-            </div>
-        </div>
-    )
-}
-
-function GuestGreeting(props) {
-    return (
-        <div className="header-container-item">
-            <div className="header-link">
-                <button className="button">
-                    <Link to="/register" className="header-link">Cadastro</Link>
-                </button>
-            </div>
-            <div className="header-link">
-                <Link to="/login" className="header-link">Login</Link>
-            </div>
-        </div>
-    )
-}
-
-function Greeting(props) {
-    const loggedId = props.loggedId;
-    if (loggedId) {
-        return <UserGreeting />
-    }
-    return <GuestGreeting />
-}
-
 function Table(props) {
     return (
         <div>
-            <div className="header-container sticky lower-opacity">
-                <div className="header-container-item">
-                    <div className="header-link">
-                        <img src={logoImg} className="header-img" alt="indicAI" />
-                    </div>
-                </div>
-                <Greeting loggedId={props.loggedId} />
-            </div>
+            <HeaderApp />
             <div className="padding-top-bottom-offset">
                 <MaterialTable
                     columns={columns}

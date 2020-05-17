@@ -36,11 +36,14 @@ def get_users():
     This route should return a json object containing the informations 
     of all users in the database that the logged responsible have access
     """
-
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
-    search = request.args.get('search', '', type=str)
-    data = User.to_collection_dict(User.query.filter(User.userid.like("%{}%".format(search))).filter(User.name.like("%{}%".format(search))), page, per_page, 'api.get_users')
+    userid = request.args.get('userid', '', type=str)
+    if userid:
+        data = User.to_collection_dict(User.query.filter_by(userid=userid), page, per_page, 'api.get_users')
+    else:
+        search = request.args.get('search', '', type=str)
+        data = User.to_collection_dict(User.query.filter(User.userid.like("%{}%".format(search))), page, per_page, 'api.get_users')
     return jsonify(data)
 
 
