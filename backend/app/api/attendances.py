@@ -4,6 +4,7 @@ from app.api import bp
 from app.models import User, Attendance
 from app.api.errors import bad_request
 from app.api.auth import token_auth
+from sqlalchemy import or_
 
 
 @bp.route('/attendances', methods=['GET'])
@@ -17,7 +18,10 @@ def get_attendances():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
     search = request.args.get('search', '', type=str)
-    data = Attendance.to_collection_dict(Attendance.query, page, per_page, 'api.get_attendances')
+    conds = [ User.userid.like("%{}%".format(search)), User.name.like("%{}%".format(search)), Attendance.age.like("%{}%".format(search)), Attendance.weight.like("%{}%".format(search))]
+    data = Attendance.to_collection_dict(
+        Attendance.query.join(Attendance.pacient).filter(or_(*conds))
+        , page, per_page, 'api.get_attendances')
     return jsonify(data)
 
 

@@ -257,7 +257,7 @@ class Attendance(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        for field in ['timestamp', 'timestamp', 'age', 'height', 'temperature']:
+        for field in ['timestamp', 'timestamp', 'age', 'height', 'weight', 'temperature', 'cbc', 'pcr', 'respiratory_infections']:
             if field in data:
                 setattr(self, field, data[field])
 

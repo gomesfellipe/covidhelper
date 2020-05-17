@@ -43,12 +43,12 @@ const tableIcons = {
 
 const columns = [
     { title: "DATA", field: "timestamp", editable: "never" },
-    { title: "NOME", field: "name", editable: "onAdd" },
-    { title: "ID", field: "userid" },
-    { title: "IDADE", field: "age", editable: "never" },
+    { title: "ID", field: "userid", editable: "never" },
+    { title: "NOME", field: "name" },
+    { title: "IDADE", field: "age" },
+    { title: "PESO", field: "weight" },
     { title: "PREDICAO COVID", field: "sars_cov_2_labtest_pred", editable: "never" },
     { title: "CONFIRMACAO", field: "sars_cov_2_confirmation", editable: "never" },
-    
 ];
 
 function Table(props) {
@@ -74,21 +74,6 @@ function Table(props) {
                         })
                     }
                     editable={{
-                        onRowAdd: newData =>
-                            new Promise((resolve, reject) => {
-                                api.post('users',
-                                    {
-                                        "username": newData.username,
-                                        "password": "rafael",
-                                        "rg": newData.rg
-                                    }, props.headers)
-                                    .then(response => {
-                                        resolve()
-                                    }).catch(error => {
-                                        alert(error);
-                                        reject()
-                                    })
-                            }),
                         onRowUpdate: (newData, oldData) =>
                             new Promise((resolve, reject) => {
                                 api.put(`users/${oldData.id}`,
@@ -116,7 +101,7 @@ function Table(props) {
                             }),
                     }}
                     title="Atendimentos"
-                    detailPanel={[
+                    /* detailPanel={[
                         {
                             tooltip: 'Show Name',
                             render: rowData => {
@@ -132,7 +117,7 @@ function Table(props) {
                                     )  
                             },
                         }
-                    ]}
+                    ]} */
                     onRowClick={(event, rowData, togglePanel) => togglePanel()}
                     icons={tableIcons}
                     options={{
