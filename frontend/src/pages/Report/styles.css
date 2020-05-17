@@ -30,17 +30,60 @@
     display: flex;
     flex-wrap: wrap;
 }
+.plot-box-status{
+    width: 350px;
+    padding: 12px;
+    -webkit-box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.48);
+    box-shadow: 0px 0px 5px 3px rgba(0, 0, 0, 0.2);
+}
+
+.plot-box-status .alert-icon{
+    width: 38%;
+}
+
+.plot-box-status .model_output{
+    width: 58%;
+}
+
+.model-class{
+    font-size: 28px;
+    color: white;
+}
+
+.model-proba{
+    font-size: 18px;
+    color: white;
+}
+
+.poz{
+    background-color: #F06C61;
+}
+
+.neg{
+    background-color: #386796;
+}
 
 .plot-box-50{
     min-width: 350px;
-    width: 40%;
+    width: 48%;
 }
 
-.box-50{
+.plot-box-30{
+    min-width: 350px;
+    width: 28%;
+}
+
+.plot-box-70{
+    min-width: 350px;
+    width: 68%;
+}
+
+.box-50, .box-7030{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
 }
+
 .plot-header{
     width: 100%;
     display: flex;
@@ -49,11 +92,30 @@
 .plot-header h3{
     font-weight: lighter;
     color: #386796;
-    size: 16px;
+    font-size: 18px;
     text-align: left;
     padding: 12px;
 }
 
-.clearer{
-    clear: both;
+.plot-figure{
+    width: 100%;
 }
+
+.plot-figure img{
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.plot-explanation-text ul{
+    overflow: auto;
+    padding: 5px;
+}
+/*
+.plot-explanation-text ul li{
+    display:inline;
+    padding:0px;
+    float:left;
+}
+*/

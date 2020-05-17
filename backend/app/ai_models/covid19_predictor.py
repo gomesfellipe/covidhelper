@@ -15,19 +15,17 @@ class labtest_predictor:
     #Class variables
     model_variables = ['Idade', 'Plaquetas', 'VMP', 'Hemácias', 'Linfócitos', 'CHCM', 'Leucócitos', 
                         'Basófilos', 'Eosinófilos', 'VCM', 'Monócitos', 'RDW', 'Outra gripe']
-    norm = {
-            'rdw': {'avg': 13.65, 'std':0.85},
-            'vmp': {'avg': 10, 'std':1},
-            'vcm': {'avg': 90.9, 'std':4.85},
-            'chcm': {'avg': 32.5, 'std':1},
-            'hemacias': {'avg': 4.8, 'std':0.4},
-            'plaquetas': {'avg': 226650, 'std':2661},
-            'linfocitos': {'avg': 2075, 'std':672},
-            'basofilos': {'avg': 30, 'std':19},
-            'leucocitos': {'avg': 6284, 'std':1746},
-            'eosinofilos': {'avg': 234, 'std':190},
-            'monocitos': {'avg': 385, 'std':187}
-            }
+    norm = {'rdw': {'avg': 13.6043, 'std':0.850362},
+            'vmp': {'avg': 9.95539, 'std':1.01304},
+            'vcm': {'avg': 91.0455, 'std':4.64755},
+            'chcm': {'avg': 32.5655, 'std':1.02971},
+            'hemacias': {'avg': 4.79364, 'std':0.416998},
+            'plaquetas': {'avg': 227061, 'std':2474.57},
+            'linfocitos': {'avg': 2124.92, 'std':685.689},
+            'basofilos': {'avg': 31.8886, 'std':18.0486},
+            'leucocitos': {'avg': 6440.36, 'std':1711.63},
+            'eosinofilos': {'avg': 245.356, 'std':194.075},
+            'monocitos': {'avg': 359.505, 'std':174.026} }
     
     probs_df = pd.read_csv('app/ai_models/plot_files/plot_1_probs.csv') # Plot 1
     
@@ -105,7 +103,8 @@ class labtest_predictor:
         plot_4_name = 'app/ai_models/temp/mapa-'+str(patient_id)+'.png'
         
         #### Configurações gerais do plt
-        FONT_SIZE = 14
+        DPI_IMAGES=100
+        FONT_SIZE = 8
         FONT_NAME = 'sans-serif'
         plt.rc('font',family=FONT_NAME, size=FONT_SIZE)
         plt.rc('axes', titlesize=FONT_SIZE, labelsize=FONT_SIZE)
@@ -118,7 +117,7 @@ class labtest_predictor:
         exame_resp = pred
         exame_prob = prob
         # Plot
-        fig, axis = plt.subplots(nrows=1, ncols=1, figsize=(15,10))
+        fig, axis = plt.subplots(nrows=1, ncols=1, figsize=(5,5))
         sns.kdeplot(self.probs_df['prob_neg'], shade=True, color='#386796', ax=axis, linestyle="--", label='Casos Negativos')
         sns.kdeplot(self.probs_df['prob_pos'], shade=True, color='#F06C61', ax=axis, label='Casos positivos')
         # Pegar eixo XY do Plt object para fazer a interpolação
@@ -130,7 +129,7 @@ class labtest_predictor:
             data_x, data_y = axis.lines[1].get_data()
         # Fazer a interpolação e plot
         yi = np.interp(xi, data_x, data_y)
-        axis.plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=15, label='Paciente')
+        axis.plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=10, label='Paciente')
         # Outras configuracoes do plot
         axis.legend(loc="upper right")
         #axis.set_title('Probabilidade de ser COVID Positivo pelo modelo', fontweight='bold')
@@ -138,7 +137,7 @@ class labtest_predictor:
         axis.set_ylim([0, axis.get_ylim()[1]])
         plt.tight_layout()
         # Salvar plot 1
-        plt.savefig(plot_1_name)
+        plt.savefig(plot_1_name, dpi=DPI_IMAGES, bbox_inches='tight', pad_inches=0)
         plt.close()
         
         #### PLOT 2 - SHAP
@@ -155,7 +154,7 @@ class labtest_predictor:
         waterfall_plot(expected_value, shap_values_sample[0], sample_x, feature_names=features, max_display=20, show=False)
         # Salvar imagem
         plt.tight_layout()
-        plt.savefig(plot_2_name)
+        plt.savefig(plot_2_name, dpi=DPI_IMAGES, bbox_inches='tight', pad_inches=0)
         plt.close()
         
         #### PLOT 3 - Distribuição das variáveis mais importantes para o modelo
@@ -164,7 +163,7 @@ class labtest_predictor:
         target_0 = self.train_df[self.train_df['target'] == 0][['Leucócitos', 'Plaquetas', 'Hemácias', 'Eosinófilos']]
         target_1 = self.train_df[self.train_df['target'] == 1][['Leucócitos', 'Plaquetas', 'Hemácias', 'Eosinófilos']]
         # Plot
-        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(15,10))
+        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(7,5))
         # Plot settings
         #sns.set_color_codes()
         #st = fig.suptitle("Distribuição das variáveis importantes para o modelo", fontweight='bold')
@@ -186,7 +185,7 @@ class labtest_predictor:
             xi = patient_preprocessed[feat]
             yi = np.interp(xi, data_x, data_y)
             ## Plot ponto na curva
-            axes[r][c].plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=15, label='Paciente')
+            axes[r][c].plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=10, label='Paciente')
             axes[r][c].set_title(feat)
             axes[r][c].legend(loc="upper right")
             axes[r][c].set_ylim([0, axes[r][c].get_ylim()[1]])
@@ -199,7 +198,7 @@ class labtest_predictor:
         # Ajeitar o plot
         plt.tight_layout()
         # Salvar imagem
-        plt.savefig(plot_3_name)
+        plt.savefig(plot_3_name, dpi=DPI_IMAGES, bbox_inches='tight', pad_inches=0)
         plt.close()
         
         #### PLOT 4 - Mapa com SVD para os pacientes
@@ -222,14 +221,15 @@ class labtest_predictor:
         comp_0 = comp[comp['TG'] == 0][['C1', 'C2']]                                 # Dataframe de CP para negativos
         comp_1 = comp[comp['TG'] == 1][['C1', 'C2']]                                 # Dataframe de CP para positivos
         # Plot
-        fig, ax = plt.subplots(figsize=(15,15));
+        fig, ax = plt.subplots(figsize=(5,5))
+        plt.margins(0,0)
         sns.scatterplot(ax=ax, data=comp_0, x='C1',y='C2', color='#386796', label='Casos Negativos')
         sns.scatterplot(ax=ax, data=comp_1, x='C1',y='C2', color='#F06C61', label='Casos Positivos')
         x_mean, y_mean, width, height, angle = self.build_ellipse(comp_0['C1'], comp_0['C2'])
         ax.add_patch(Ellipse((x_mean, y_mean), width, height, angle=angle, linewidth=2, color='#386796', fill=True, alpha=0.2))
         x_mean, y_mean, width, height, angle = self.build_ellipse(comp_1['C1'], comp_1['C2'])
         ax.add_patch(Ellipse((x_mean, y_mean), width, height, angle=angle, linewidth=2, color='#F06C61', fill=True, alpha=0.2))
-        ax.plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=15, label='Paciente')
+        ax.plot([xi],[yi], linestyle = 'None', marker="*", color='black', markersize=10, label='Paciente')
         # Configurações do plot
         #ax.set_title('Similaridade entre pacientes',fontweight='bold')
         ax.set_xticks([])
@@ -240,7 +240,8 @@ class labtest_predictor:
         labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
         ax.legend(handles, labels, loc="upper right")
         # Salvar imagem
-        plt.savefig(plot_4_name)
+        plt.axis('off')
+        plt.savefig(plot_4_name, dpi=DPI_IMAGES, bbox_inches='tight', pad_inches=0)
         plt.close()
         
         # Retornar

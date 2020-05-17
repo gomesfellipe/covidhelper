@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
 
 import HeaderApp from '../../components/HeaderApp'
-import Popup from "reactjs-popup";
 
 import './styles.css'
 
@@ -54,17 +53,7 @@ export default function NewAttendance() {
     const token = localStorage.getItem('token');
     const history = useHistory();
 
-    const Tooltip = () => (
-        <Popup
-          trigger={open => (
-            <button className="button">Trigger - {open ? "Opened" : "Closed"}</button>
-          )}
-          position="right center"
-          closeOnDocumentClick
-        >
-          <span> Popup content </span>
-        </Popup>
-      );
+    
 
     function handleUserClear(e) {
         e.preventDefault();
@@ -158,7 +147,7 @@ export default function NewAttendance() {
         <div>
             <HeaderApp />
             <div className="new-attendance-box">
-                <Tooltip/>
+                
                 <h1>NOVO ATENDIMENTO</h1>
                 <h2>IDENTIFICAÇÃO DO PACIENTE</h2>
                 <p>

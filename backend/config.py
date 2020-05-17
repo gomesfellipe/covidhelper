@@ -6,4 +6,4 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'convidhelper.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    MEDIA_FOLDER = os.path.join(basedir, 'app/api/media/')
+    MEDIA_FOLDER = os.path.join(basedir, 'app/ai_models/temp/')
