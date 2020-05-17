@@ -4,6 +4,7 @@ import api from '../../services/api';
 import './styles.css'
 
 import HeaderApp from '../../components/HeaderApp'
+import { useHistory } from 'react-router-dom';
 
 export default function NewAttendance() {
     const [userid, setUserid] = useState('');
@@ -50,6 +51,7 @@ export default function NewAttendance() {
 
 
     const token = localStorage.getItem('token');
+    const history = useHistory();
 
     function handleUserClear(e) {
         e.preventDefault();
@@ -59,7 +61,7 @@ export default function NewAttendance() {
         setReadOnly(false);
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         const data = {
             name: name,
@@ -99,6 +101,20 @@ export default function NewAttendance() {
             vmp: vmp
         }
         console.log(data);
+
+        const headers = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        try {
+            await api.post('attendances', data, headers);
+            history.push('/dashboard');
+        } catch(error) {
+            console.log(error);
+        }
+        
     }
 
     async function handleSearchUser(e) {

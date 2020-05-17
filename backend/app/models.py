@@ -258,6 +258,11 @@ class Attendance(PaginatedAPIMixin, db.Model):
         }
         return data
 
+    def from_dict(self, data):
+        for field in ['userid', 'name', 'gender', 'timestamp', 'timestamp', 'age', 'height', 'temperature']:
+            if field in data:
+                setattr(self, field, data[field])
+
     def __repr__(self):
         return '<Attendance {}>'.format(self.id)
 

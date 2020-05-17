@@ -1,4 +1,5 @@
-from flask import jsonify, request, abort
+from app import db
+from flask import jsonify, request, abort, url_for
 from app.api import bp
 from app.models import User, Attendance
 from app.api.errors import bad_request
@@ -18,6 +19,29 @@ def get_attendances():
     search = request.args.get('search', '', type=str)
     data = Attendance.to_collection_dict(Attendance.query, page, per_page, 'api.get_attendances')
     return jsonify(data)
+
+
+@bp.route('/attendances', methods=['POST'])
+def create_attendance():
+    """
+    This route should create a new attendance and return its informations
+    """
+
+    data = request.get_json() or {}
+    print(data)
+    #TODO: Verifications
+    attendance = Attendance()
+    print()
+    print()
+    print(attendance.pacient.name)
+    attendance.from_dict(data)
+    print(attendance)
+    db.session.add(attendance)
+    db.session.commit()
+    response = jsonify(attendance.to_dict())
+    response.status_code = 201
+    response.headers['Location'] = url_for('api.create_attendance')
+    return response
 
 
 @bp.route('/attendances/<int:id>', methods=['GET'])
