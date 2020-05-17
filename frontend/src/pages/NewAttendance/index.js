@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
 
-import './styles.css'
-
 import HeaderApp from '../../components/HeaderApp'
+import Popup from "reactjs-popup";
+
+import './styles.css'
 
 export default function NewAttendance() {
     const [userid, setUserid] = useState('');
@@ -50,6 +52,19 @@ export default function NewAttendance() {
 
 
     const token = localStorage.getItem('token');
+    const history = useHistory();
+
+    const Tooltip = () => (
+        <Popup
+          trigger={open => (
+            <button className="button">Trigger - {open ? "Opened" : "Closed"}</button>
+          )}
+          position="right center"
+          closeOnDocumentClick
+        >
+          <span> Popup content </span>
+        </Popup>
+      );
 
     function handleUserClear(e) {
         e.preventDefault();
@@ -59,7 +74,7 @@ export default function NewAttendance() {
         setReadOnly(false);
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
         const data = {
             name: name,
@@ -99,6 +114,20 @@ export default function NewAttendance() {
             vmp: vmp
         }
         console.log(data);
+
+        const headers = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+
+        try {
+            await api.post('attendances', data, headers);
+            history.push('/dashboard');
+        } catch(error) {
+            console.log(error);
+        }
+        
     }
 
     async function handleSearchUser(e) {
@@ -129,6 +158,7 @@ export default function NewAttendance() {
         <div>
             <HeaderApp />
             <div className="new-attendance-box">
+                <Tooltip/>
                 <h1>NOVO ATENDIMENTO</h1>
                 <h2>IDENTIFICAÇÃO DO PACIENTE</h2>
                 <p>
