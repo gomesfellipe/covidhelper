@@ -15,8 +15,14 @@ export default function Report(props) {
     const id = props.location.state.detail.id;
     const token = localStorage.getItem('token');
 
-    const [img1, setImage1] = useState('');
+    const [result, setResult] = useState('EM ANÁLISE');
+    const [result_proba, setResultproba] = useState(' ');
 
+    const [shapImg, setShap] = useState('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
+    const [mapaImg, setMapa] = useState('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
+    const [probaImg, setProba] = useState('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
+    const [distImg, setDist] = useState('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
+    
     useEffect(() => {
       // Create an scoped async function in the hook
       async function anyNameFunction() {
@@ -26,7 +32,10 @@ export default function Report(props) {
           }
       });
 
-      setImage1(response.data.shap_img);
+      setShap(response.data.shap_img);
+      setMapa(response.data.mapa_img);
+      setProba(response.data.probacurve);
+      setDist(response.data.dist_img);
       }    // Execute the created function directly
       anyNameFunction();
       
@@ -110,7 +119,7 @@ export default function Report(props) {
                 <h1>Report</h1>
 
 
-                <ResultBox result="NEGATIVO"/>
+                <ResultBox result={result} proba={result_proba}/>
 
                 <div className="box-50">
                     <div className="report-item plot-box-50">
@@ -118,8 +127,8 @@ export default function Report(props) {
                             <h3>Como cada componente do exame contribuiu para o resultado:</h3>
                             <Tooltip/>
                         </div>
-                        <div className="plot-figure">
-                            <img src={img1} alt="Valores SHAP para previsão do status COVID do paciente"></img>
+                        <div className="plot-figure"> 
+                            <img src={shapImg} alt="Valores SHAP para previsão do status COVID do paciente"></img>
                         </div>
                         <div className="plot-explanation-text">
                             <ul>
@@ -135,7 +144,7 @@ export default function Report(props) {
                             <TooltipMapa/>
                         </div>
                         <div className="plot-figure">
-                            <img src="http://localhost:5000/api/media/mapa-1.png" alt="Mapa de similaridade entre pacientes"></img>
+                            <img src={mapaImg} alt="Mapa de similaridade entre pacientes"></img>
                         </div>
                         <div className="plot-explanation-text">
                             <ul>
@@ -152,7 +161,7 @@ export default function Report(props) {
                             <TooltipProba/>
                         </div>
                         <div className="plot-figure">
-                            <img src="http://localhost:5000/api/media/probacurve-1.png" alt="Probabilidade do paciente estar com SARS-CoV-2 versus histórico do modelo em outros pacientes"></img>
+                            <img src={probaImg} alt="Probabilidade do paciente estar com SARS-CoV-2 versus histórico do modelo em outros pacientes"></img>
                         </div>
                         <div className="plot-explanation-text">
                             <span>Este gráfico apresenta a função de probabilidade dos exames serem de um 
@@ -166,7 +175,7 @@ export default function Report(props) {
                             <TooltipDist/>
                         </div>
                         <div className="plot-figure">
-                            <img src="http://localhost:5000/api/media/dist-1.png" alt="Mapa de similaridade entre pacientes"></img>
+                            <img src={distImg} alt="Curva densidade de probabilidade de valores para exames em pacientes com e sem covid"></img>
                         </div>
                         <div className="plot-explanation-text">
                             <span>Os gráficos mostram a distribuição dos exames mais importantes 
