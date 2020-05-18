@@ -61,8 +61,10 @@ export default function Header() {
         <div className="header-container sticky lower-opacity">
             <div className="header-container-item">
                 <div className="header-link">
-                    <img src={logoImg} className="header-img" alt="indicAI" />
-                </div>
+                    <Link to="/dashboard" className="header-link">
+                        <img src={logoImg} className="header-img" alt="indicAI" />
+                    </Link>
+                </div>                
             </div>
             <Greeting loggedId={id} />
         </div>
