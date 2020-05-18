@@ -15,7 +15,7 @@ export default function Report(props) {
     const id = props.location.state.detail.id;
     const token = localStorage.getItem('token');
 
-    const [result, setResult] = useState('EM ANÁLISE');
+    const [result, setResult] = useState('ANALISE');
     const [result_proba, setResultproba] = useState(' ');
 
     const [shapImg, setShap] = useState('https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif');
@@ -36,6 +36,9 @@ export default function Report(props) {
       setMapa(response.data.mapa_img);
       setProba(response.data.probacurve);
       setDist(response.data.dist_img);
+      setResult(response.data.prediction);
+      setResultproba(response.data.probability);
+
       }    // Execute the created function directly
       anyNameFunction();
       

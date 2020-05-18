@@ -5,13 +5,25 @@ import alertImg from '../../assets/alert.png'
 import './styles.css'
 
 export default function ResultBox(props) {
-    const [resultado_label, setResultadolabel] = useState('ANALISANDO');
+    const [resultado_label, setResultadolabel] = useState('ANALISE');
+    console.log(props.result)
+
+
+    useEffect(() => {
+        // Create an scoped async function in the hook
+        function anyNameFunction() {    
+            if (props.result == 0){
+                setResultadolabel("NEGATIVO");
+            } else if (props.result == 1){
+                setResultadolabel("POSITIVO");
+            }
+  
+        }    // Execute the created function directly
+        anyNameFunction();
+        
+      }, [props.result]);
     
-    if (props.result == 0){
-        setResultadolabel("NEGATIVO");
-    }else{
-        setResultadolabel("POSITIVO");
-    }
+
     return (
         
         <div className={`plot-box-status ${resultado_label}`}>
