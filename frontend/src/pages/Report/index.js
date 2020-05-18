@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState} from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import HelpRounded from '@material-ui/icons/HelpRounded';
@@ -7,9 +8,30 @@ import './styles.css'
 
 import HeaderApp from '../../components/HeaderApp'
 import ResultBox from '../../components/ResultBox'
+import api from '../../services/api';
 
 
-export default function Report() {
+export default function Report(props) {
+    const id = props.location.state.detail.id;
+    const token = localStorage.getItem('token');
+
+    const [img1, setImage1] = useState('');
+
+    useEffect(() => {
+      // Create an scoped async function in the hook
+      async function anyNameFunction() {
+        const response = await api.get(`predict_labtest/${id}`, {
+          headers: {
+              'Authorization': `Bearer ${token}`
+          }
+      });
+
+      setImage1(response.data.shap_img);
+      }    // Execute the created function directly
+      anyNameFunction();
+      
+    }, []);
+
     const Tooltip = () => (
         <Popup
           trigger={open => (
@@ -97,7 +119,7 @@ export default function Report() {
                             <Tooltip/>
                         </div>
                         <div className="plot-figure">
-                            <img src="http://localhost:5000/api/media/shap-1.png" alt="Valores SHAP para previsão do status COVID do paciente"></img>
+                            <img src={img1} alt="Valores SHAP para previsão do status COVID do paciente"></img>
                         </div>
                         <div className="plot-explanation-text">
                             <ul>

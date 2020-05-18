@@ -120,7 +120,12 @@ function Table(props) {
                             },
                         }
                     ]} */
-                    onRowClick={(event, rowData, togglePanel) => {console.log(`Clicou na linha ${rowData.id}`)}}
+                    onRowClick={(event, rowData, togglePanel) => {
+                        history.push({
+                        pathname: '/report',
+                        state: { detail: {"id": rowData.id} }
+                      })
+                    }}
                     icons={tableIcons}
                     options={{
                         exportButton: true,
